@@ -9,6 +9,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  margin: 0;
 }
 
 section[data-state="playScreen"]{
@@ -76,4 +77,13 @@ section[data-state="optionScreen"] input {
 
 section[data-state="optionScreen"] input, section[data-state="optionScreen"] label {
   font-family: 'Hind Vadodara', sans-serif;
+}
+
+section[data-state="victory"] {
+  font-family: 'Poiret One', cursive;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 }

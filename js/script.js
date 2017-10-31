@@ -18,8 +18,8 @@ $(document).ready(function()  {
     var baseY = JSON.parse(localStorage.getItem('gameAxes')).y;
     var playScreen = $('section[data-state="playScreen"]'); //on passe en variable les données de la section (c'est un array) donc pour avoir rpecisement le html on prend l'entrée 0 de cet array
     var html = "<div style='width:" + baseX * 40 + "px' class='game-container'>";
-    for (var x = 1; x <= baseX; x++) {
-      for (var y = 1; y <= baseY ; y++) {
+    for (var y = 1; y <= baseY; y++) {
+      for (var x = 1; x <= baseX ; x++) {
         html += "<div data-x='" + x + "' data-y='" + y + "' class='game-div'></div>";
       };
     };
@@ -60,27 +60,65 @@ $(document).ready(function()  {
       }
     });
   }
+  function checkVictory(currentPlayerPos) {
+    if (currentPlayerPos.x == JSON.parse(localStorage.getItem('goalPos')).x && currentPlayerPos.y == JSON.parse(localStorage.getItem('goalPos')).y) {
+      displayScreen('victory')
+      localStorage.setItem('gameState', 'victory')
+    }
+  }
 
   function movePlayer(direction) {
     var currentPlayerPos = JSON.parse(localStorage.getItem('playerPos'));
     var gameSize = JSON.parse(localStorage.getItem('gameAxes'));
     if (direction == 'UP') {
-      if ((currentPlayerPos.x - 1) > 0) {
+      if ((currentPlayerPos.y - 1) > 0) {
         //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
-        currentPlayerPos.x -= 1;
+        currentPlayerPos.y -= 1;
+        $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
+        checkVictory(currentPlayerPos);
         localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
       } else {
         console.log('aie !');
       }
     } else if (direction == 'DOWN') {
+      if ((currentPlayerPos.y + 1) <= gameSize.y) {
+        //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
+        $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
+        currentPlayerPos.y += 1;
+        $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
+        checkVictory(currentPlayerPos);
+        localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
+      } else {
+        console.log('aie !');
+      }
 
     } else if (direction == 'LEFT') {
+      if ((currentPlayerPos.x - 1) > 0) {
+        //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
+        $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
+        currentPlayerPos.x -= 1;
+        $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
+        checkVictory(currentPlayerPos);
+        localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
+      } else {
+        console.log('aie !');
+      }
 
     } else if (direction == 'RIGHT') {
+      if ((currentPlayerPos.x + 1) <= gameSize.x) {
+        //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
+        $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
+        currentPlayerPos.x += 1;
+        $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
+        checkVictory(currentPlayerPos );
+        localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
+      } else {
+        console.log('aie !');
+      }
 
     }
-    debugger;
+    //debugger;
   }
 
 
