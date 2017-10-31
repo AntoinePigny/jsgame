@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>My game</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Hind+Vadodara:400,700|Poiret+One" rel="stylesheet">
+
+  </head>
+  <body>
+    <button class="reset-button" data-action="reset">Reset</button>
+    <section data-state="optionScreen" class="game-screens hidden">
+      <h2>THE GAME (You lost)</h2>
+      <h3>Select Options</h3>
+      <label for="x">Nombre de cases sur l'axe X</label>
+      <input id="x" type="number" name="x" value="10" max="100">
+      <label for="y">Nombre de cases sur l'axe y</label>
+      <input id="y" type="number" name="y" value="10" max="100">
+      <button data-action="startGame" class="start" name="start">Start Game</button>
+    </section>
+    <section data-state="playScreen" class="game-screens hidden">
+
+    </section>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+  </body>
+</html>

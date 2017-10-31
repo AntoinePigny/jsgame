@@ -1,0 +1,79 @@
+/*Typo :
+font-family: 'Poiret One', cursive;
+font-family: 'Hind Vadodara', sans-serif;
+*/
+
+body {
+  background: url("../moulin/moulin_@2X.png") repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+section[data-state="playScreen"]{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.game-div{
+  border: 1px solid black;
+  height: 38px;
+  width: 38px;
+}
+.game-screens {
+  background-color: lightgrey;
+  width: 70vw;
+  height: 70vh;
+}
+
+.hidden {
+  display: none!important;
+}
+
+.reset-button {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+section[data-state="optionScreen"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.start {
+  outline: none;
+  margin-top: 10px;
+}
+
+
+section[data-state="optionScreen"] h2 {
+  font-family: 'Poiret One', cursive;
+  font-size: 50px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+section[data-state="optionScreen"] h3 {
+  font-family: 'Poiret One', cursive;
+  font-size: 35px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+section[data-state="optionScreen"] input {
+  width: 30px;
+}
+
+section[data-state="optionScreen"] input, section[data-state="optionScreen"] label {
+  font-family: 'Hind Vadodara', sans-serif;
+}
