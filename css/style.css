@@ -85,5 +85,13 @@ section[data-state="victory"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
+}
+section[data-state="defeat"] {
+  font-family: 'Poiret One', cursive;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }

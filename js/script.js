@@ -1,4 +1,31 @@
 $(document).ready(function()  {
+  function getRandNumber(max, min = 1) {
+    return Math.floor((Math.random() * max) + min);
+  };
+
+  function checkPos(maxX, maxY) {
+    var flag = false;
+    var it = 0;
+    while (!flag) {
+      it ++;
+      var x = getRandNumber(maxX);
+      var y = getRandNumber(maxY);
+      console.log(x);
+      console.log(y);
+      console.log("iteration = " + it);
+      console.log("------------------");
+      if (x !== JSON.parse(localStorage.getItem('playerPos')).x && y !== JSON.parse(localStorage.getItem('playerPos')).y) {
+        if (x !== JSON.parse(localStorage.getItem('goalPos')).x && y !== JSON.parse(localStorage.getItem('goalPos')).y) {
+          flag = true;
+          return {
+            "x": x,
+            "y": y
+          };
+        }
+      }
+    }
+  }
+
   function init() {
     if(localStorage.getItem('gameState') == null) {
       localStorage.setItem('gameState', 'optionScreen');
@@ -44,10 +71,18 @@ $(document).ready(function()  {
       };
       localStorage.setItem('goalPos', JSON.stringify(pos));
     };
+    if (localStorage.getItem('enemyPos') == null) {
+      var pos = checkPos(JSON.parse(localStorage.getItem('gameAxes')).x, JSON.parse(localStorage.getItem('gameAxes')).y);
+      localStorage.setItem('enemyPos', JSON.stringify(pos));
+    };
+
     var playerPos = JSON.parse(localStorage.getItem('playerPos'));
     var goalPos = JSON.parse(localStorage.getItem('goalPos'));
+    var enemyPos = JSON.parse(localStorage.getItem('enemyPos'))
+
     $('.game-div[data-x="' + playerPos.x + '"][data-y="' + playerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
     $('.game-div[data-x="' + goalPos.x + '"][data-y="' + goalPos.y + '"]').html('<img style="width:100%;height:100%;" src="/door.png">');
+    $('.game-div[data-x="' + enemyPos.x + '"][data-y="' + enemyPos.y + '"]').html('<img style="width:100%;height:100%;" src="/kefka.png">');
     $('body').on('keydown', function(e) {
       if(e.keyCode == 38/* UP */) {
         movePlayer('UP');
@@ -60,10 +95,13 @@ $(document).ready(function()  {
       }
     });
   }
-  function checkVictory(currentPlayerPos) {
+  function checkState(currentPlayerPos) {
     if (currentPlayerPos.x == JSON.parse(localStorage.getItem('goalPos')).x && currentPlayerPos.y == JSON.parse(localStorage.getItem('goalPos')).y) {
       displayScreen('victory')
       localStorage.setItem('gameState', 'victory')
+    } else if (currentPlayerPos.x == JSON.parse(localStorage.getItem('enemyPos')).x && currentPlayerPos.y == JSON.parse(localStorage.getItem('enemyPos')).y) {
+      displayScreen('defeat')
+      localStorage.setItem('gameState', 'defeat')
     }
   }
 
@@ -76,7 +114,6 @@ $(document).ready(function()  {
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
         currentPlayerPos.y -= 1;
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
-        checkVictory(currentPlayerPos);
         localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
       } else {
         console.log('aie !');
@@ -87,7 +124,6 @@ $(document).ready(function()  {
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
         currentPlayerPos.y += 1;
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
-        checkVictory(currentPlayerPos);
         localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
       } else {
         console.log('aie !');
@@ -99,7 +135,6 @@ $(document).ready(function()  {
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
         currentPlayerPos.x -= 1;
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
-        checkVictory(currentPlayerPos);
         localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
       } else {
         console.log('aie !');
@@ -111,14 +146,77 @@ $(document).ready(function()  {
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('');
         currentPlayerPos.x += 1;
         $('.game-div[data-x="' + currentPlayerPos.x + '"][data-y="' + currentPlayerPos.y + '"]').html('<img style="width:100%;height:100%;" src="/vivi.jpg">');
-        checkVictory(currentPlayerPos );
         localStorage.setItem('playerPos', JSON.stringify(currentPlayerPos));
       } else {
         console.log('aie !');
       }
+    }
+    console.log("je me deplace");
+    checkState(currentPlayerPos);
+    moveEnemy();
+    if (currentEnemyPos.x == JSON.parse(localStorage.getItem('goalPos')).x && currentEnemyPos.y == JSON.parse(localStorage.getItem('goalPos')).y) {
+      moveEnemy();
+      $('.game-div[data-x="' + JSON.parse(localStorage.getItem('goalPos'.x + '"][data-y="' + JSON.parse(localStorage.getItem('goalPos'.y + '"]').html('<img style="width:100%;height:100%;" src="/door.png">');
 
     }
-    //debugger;
+    checkState(currentPlayerPos);
+
+  }
+  function moveEnemy() {
+    var currentPlayerPos = JSON.parse(localStorage.getItem('playerPos'));
+    var currentEnemyPos = JSON.parse(localStorage.getItem('enemyPos'));
+    var gameSize = JSON.parse(localStorage.getItem('gameAxes'));
+    if (getRandNumber(2) == 1) {
+      if (getRandNumber(2) == 1) {
+        if ((currentEnemyPos.y - 1) > 0) {
+        //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('');
+        currentEnemyPos.y -= 1;
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('<img style="width:100%;height:100%;" src="/kefka.png">');
+        localStorage.setItem('enemyPos', JSON.stringify(currentEnemyPos));
+        } else {
+          console.log('humph !');
+        }
+      //SE déplace en haut
+      } else {
+        if ((currentEnemyPos.y + 1) <= gameSize.y) {
+        //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('');
+        currentEnemyPos.y += 1;
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('<img style="width:100%;height:100%;" src="/kefka.png">');
+        localStorage.setItem('enemyPos', JSON.stringify(currentEnemyPos));
+        } else {
+          console.log('humph !');
+        }
+      //Se deplace en bas
+
+      }
+    } else {
+      if (getRandNumber(2) == 1) {
+        if ((currentEnemyPos.x - 1) > 0) {
+        //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('');
+        currentEnemyPos.x -= 1;
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('<img style="width:100%;height:100%;" src="/kefka.png">');
+        localStorage.setItem('enemyPos', JSON.stringify(currentEnemyPos));
+        } else {
+          console.log('humph !');
+        }
+      //SE déplace a droite
+      } else {
+        if ((currentEnemyPos.x + 1) <= gameSize.x) {
+        //on prend la position du joueur telle qu'elle etait avant et on vide la case via html('')
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('');
+        currentEnemyPos.x += 1;
+        $('.game-div[data-x="' + currentEnemyPos.x + '"][data-y="' + currentEnemyPos.y + '"]').html('<img style="width:100%;height:100%;" src="/kefka.png">');
+        localStorage.setItem('enemyPos', JSON.stringify(currentEnemyPos));
+        } else {
+          console.log('humph !');
+        }
+      //Se deplace a gauche
+
+      }
+    }
   }
 
 
